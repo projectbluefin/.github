@@ -5,7 +5,7 @@
   "autodiscover": true,
   "requireConfig": "required",
   "inheritConfig": true,
-  "inheritConfigRepoName": "{{parentOrg}}/.github",
+  "inheritConfigRepoName": "ublue-os/renovate-config",
   "inheritConfigFileName": "org-inherited-config.json",
   "inheritConfigStrict": true
 }
