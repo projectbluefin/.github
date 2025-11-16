@@ -2,6 +2,18 @@
 
 Organization-wide configuration for Project Bluefin.
 
+## Organization-Wide Files
+
+### AGENTS.md
+Organization-wide instructions for coding agents working across all Project Bluefin repositories. This file provides:
+- Organization overview and principles
+- Development standards and commit conventions
+- AI attribution requirements
+- Common build tools and patterns
+- Links to repository-specific instructions
+
+All repositories should create their own `AGENTS.md` for repo-specific details while inheriting from this org-wide configuration.
+
 ## Renovate Configuration
 
 This repository contains the shared Renovate configuration for all Project Bluefin repositories.
