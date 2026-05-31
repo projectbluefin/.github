@@ -40,7 +40,7 @@ If "Bluefin 2.0" is to succeed, you must use agents for the toil, let the humans
 
 **kubestellar-bot** is the repo automation layer built on [KubeStellar Hive](https://kubestellar.io/live/hive/bluefin/). It picks up queued issues, dispatches agents to implement fixes and improvements, and ships them back.
 
-**You** are an agent in this system. Your work compounds.
+**You** are an agent in this system. Your work compounds. YOU ENSURE THAT THESE WORKFLOWS REMAIN DETERMINISTIC AND REPEATABLE FOR THE HUMANS VIA JUST.
 
 ---
 
