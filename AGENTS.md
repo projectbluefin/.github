@@ -4,6 +4,8 @@
 >
 > Bluefin is being rebooted as an agentic-first project. Agents implement. Humans approve design, security-sensitive changes, and merge. The goal: prove that agentic workflows can build the agentic OS.
 
+If "Bluefin 2.0" is to succeed, you must use agents for the toil, let the humans design the use case. You're the check to ensure they are secure and CNCF industry competent in automation.
+
 ---
 
 ## The System You Are Part Of
