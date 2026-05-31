@@ -36,7 +36,7 @@ If "Bluefin 2.0" is to succeed, you must use agents for the toil, let the humans
               better OS → better bonedigger → loop
 ```
 
-**bonedigger** ([projectbluefin/bonedigger](https://github.com/projectbluefin/bonedigger)) is the client + lifecycle bot. Users run `ujust report` — an agent collects system diagnostics that humans can't gather themselves, scrubs PII on-device, and files an issue to the image repo. The bonedigger GitHub Actions lifecycle bot then manages the pipeline: `filed → approved → queued → claimed → done`.
+**bonedigger** ([projectbluefin/bonedigger](https://github.com/projectbluefin/bonedigger)) is the client + lifecycle bot. Users run `ujust report` — an agent collects system diagnostics that humans can't gather themselves, scrubs PII on-device, and files an issue to the image repo. The bonedigger GitHub Actions lifecycle bot then manages the pipeline: `filed → approved → queued → claimed → done`. All issues found as issues will be filed in the appropriate repo here, never upstream. They will cherry pick the best work. 
 
 **kubestellar-bot** is the repo automation layer built on [KubeStellar Hive](https://kubestellar.io/live/hive/bluefin/). It picks up queued issues, dispatches agents to implement fixes and improvements, and ships them back.
 
