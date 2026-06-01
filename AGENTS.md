@@ -94,8 +94,8 @@ For the full skill file format and where to write things, see:
 | You are working in... | Write to |
 |---|---|
 | `projectbluefin/actions` | `docs/skills/` (Copilot CLI) AND `.github/skills/` (Cloud Agent) |
-| Any other projectbluefin repo | That repo's `.github/skills/` (create if absent) |
-| ublue-os repos (aurora, bazzite) | That repo's `.github/skills/` (create if absent) |
+| Any other projectbluefin repo | That repo's `docs/skills/` (create if absent) |
+| ublue-os repos (aurora, bazzite) | Do NOT send a PR to these projects. File an issue in projectbluefin/bluefin instead |
 | Cross-cutting (affects multiple repos) | Local first, then open propagation issue in `projectbluefin/actions` |
 
 ---
