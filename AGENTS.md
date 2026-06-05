@@ -95,7 +95,7 @@ For the full skill file format and where to write things, see:
 |---|---|
 | `projectbluefin/actions` | `docs/skills/` (Copilot CLI) AND `.github/skills/` (Cloud Agent) |
 | Any other projectbluefin repo | That repo's `docs/skills/` (create if absent) |
-| ublue-os repos (aurora, bazzite) | Do NOT send a PR to these projects. File an issue in projectbluefin/bluefin instead |
+| ublue-os repos (aurora, bazzite) | **NEVER write to these repos** — no issues, PRs, comments, forks, webhooks, or automated reports. Tell the human to report manually. See prohibition below. |
 | Cross-cutting (affects multiple repos) | Local first, then open propagation issue in `projectbluefin/actions` |
 
 ---
@@ -147,6 +147,20 @@ Do not request review without evidence. Before opening a PR for review:
 | [projectbluefin/testing-lab](https://github.com/projectbluefin/testing-lab) | Homelab QA pipeline |
 | [projectbluefin/bluespeed](https://github.com/projectbluefin/bluespeed) | KubeStellar homelab factory |
 | [projectbluefin/iso](https://github.com/projectbluefin/iso) | ISO builds |
+
+### 🚫 Absolute prohibition — ublue-os org
+
+**NEVER create issues, pull requests, comments, forks, webhook calls, API writes, automated reports, or any other programmatic action targeting any `ublue-os/*` repository.**
+
+This applies in every situation, without exception:
+- Issues, comments, PRs, forks → **BANNED**
+- Automated reports (bonedigger output, CI notifications, diagnostic uploads) → **BANNED**
+- `workflow_dispatch` or `repository_dispatch` calls to `ublue-os/*` → **BANNED**
+- Any `gh` CLI command that writes to `ublue-os/*` → **BANNED**
+
+If a task seems to require touching an upstream `ublue-os` repo → **stop and tell the human to report it manually.**
+
+Violating this risks getting the projectbluefin organization banned from GitHub.
 
 ### Consuming repos (ublue-os)
 
