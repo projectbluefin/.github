@@ -131,12 +131,28 @@ Do not request review without evidence. Before opening a PR for review:
 
 | Repo | Role |
 |---|---|
-| [projectbluefin/bluefin](https://github.com/projectbluefin/bluefin) | Main OS image |
-| [projectbluefin/bluefin-lts](https://github.com/projectbluefin/bluefin-lts) | LTS variant (CentOS/bootc) |
+| [projectbluefin/bluefin](https://github.com/projectbluefin/bluefin) | Main OS image (Fedora Silverblue base) |
+| [projectbluefin/bluefin-lts](https://github.com/projectbluefin/bluefin-lts) | LTS variant (CentOS Stream / bootc) |
 | [projectbluefin/actions](https://github.com/projectbluefin/actions) | Shared CI actions + canonical skills hub |
 | [projectbluefin/common](https://github.com/projectbluefin/common) | Shared OCI layer |
-| [projectbluefin/dakota](https://github.com/projectbluefin/dakota) | BuildStream image build |
+| [projectbluefin/dakota](https://github.com/projectbluefin/dakota) | BuildStream image build (GNOME upstream) |
 | [projectbluefin/bonedigger](https://github.com/projectbluefin/bonedigger) | Client reporting + issue lifecycle bot |
+
+### Release model (as of 2026-06-09)
+
+All three image repos (bluefin, bluefin-lts, dakota) use a **PR-as-gate** promotion model:
+
+1. `promote-testing-to-main.yml` maintains an always-open `auto/promote-testing-to-main` PR
+2. `pr-release-gate.yml` (inline `gate` job in the promote workflow) verifies digests, cosign, and e2e — posts a sticky status comment and sets `release/ready` or `release/blocked` label
+3. Merging the PR (requires **2 `projectbluefin/maintainers` approvals**) cuts a release
+4. `execute-release.yml` fires on merge: re-verifies, `skopeo copy :testing → :stable/:lts`, creates GitHub release
+5. `release-reminder.yml` posts a plain-text reminder after 7 days if the PR is still unmerged
+
+**Tag targets:** bluefin `:testing` → `:stable`, bluefin-lts `:testing` → `:lts`, dakota `:testing` → `:stable`
+
+**Branch protection:** `main` in all three repos requires 2 approvals from `projectbluefin/maintainers`. The `maintainers` team can bypass for emergency admin merges.
+
+**Critical GITHUB_TOKEN limit:** Pushes from `GITHUB_TOKEN` do NOT fire `pull_request` synchronize events, and cannot dispatch `workflow_dispatch` events. Gate checks must run as inline jobs inside the workflow that updates the PR branch — not via separate dispatch.
 
 ### Infrastructure
 
