@@ -44,6 +44,42 @@ If "Bluefin 2.0" is to succeed, you must use agents for the toil, let the humans
 
 ---
 
+## Tool Documentation — Context7 First
+
+> **This is a hard rule. No exceptions.**
+
+Every tool in this factory has open-source documentation. You have access to it via Context7. Use it.
+
+**Before writing a single line that uses any tool, library, or API:**
+
+```
+resolve-library-id "<tool>"  →  get-library-docs  →  implement  →  cite the section
+```
+
+This applies to every tool without exception:
+
+| Category | Tools |
+|---|---|
+| Image supply chain | `bootc`, `cosign`, `skopeo`, `buildah`, `oras` |
+| Security scanning | `syft`, `grype`, `trivy` |
+| CI tooling | `actionlint`, `renovate`, `pre-commit` |
+| Build systems | `BuildStream/bst`, `just` |
+| Testing | `qecore`, `dogtail`, `behave` |
+| Cluster ops | `helm`, `kubectl`, `k3s`, `ArgoCD`, `Argo Workflows`, `KubeVirt` |
+| Observability | `loki`, `zot` |
+| TUI | `bubbletea`, `huh`, `lipgloss` |
+| Language toolchains | `go`, `golangci-lint` |
+
+**Banned behaviors:**
+- Guessing flags, API signatures, or configuration schema
+- Trial-and-error flag hunting
+- Spending more than 5 minutes on a tool behavior question without reading its docs
+- Implementing against training-data memory instead of live documentation
+
+If Context7 does not have a library, use `curl` or `gh` to fetch the upstream README or docs directly. Reading the source is always correct. Guessing is never correct.
+
+---
+
 ## The Self-Improvement Loop
 
 > **This is the core operating model. Read it.**
@@ -71,9 +107,25 @@ Agent works on task
 - [ ] Is there a skill file for the area I worked in?
 - [ ] If yes — did I update it?
 - [ ] If no — did I create one?
+- [ ] Does every skill file that covers a tool have `context7-sources` frontmatter listing that tool's Context7 library ID?
 - [ ] Is the skill file committed in this same PR?
 
-For the full skill file format and where to write things, see:
+**Skill file frontmatter is required.** Every skill file must open with:
+
+```yaml
+---
+name: <skill-name>
+description: "<one sentence: what this covers and when to load it>"
+metadata:
+  type: procedure | reference
+  context7-sources:
+    - /upstream-org/repo-name   # one entry per tool this skill covers
+---
+```
+
+If you used a tool and there is no `context7-sources` entry for it in the relevant skill file, add it. This is not optional. It is the mechanism that prevents the next agent from guessing.
+
+For the full skill file format, see:
 [`projectbluefin/actions/.github/skills/skill-improvement/SKILL.md`](https://github.com/projectbluefin/actions/blob/main/.github/skills/skill-improvement/SKILL.md)
 
 ### What counts as a learning worth writing back
