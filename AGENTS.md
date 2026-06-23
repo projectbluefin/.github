@@ -133,7 +133,7 @@ Agents implement autonomously **except** at these gates. Stop and request human 
 | **Design Gate** | Architecture changes, new subsystem design, behavioral changes visible to users |
 | **Security Gate** | Auth, signing, supply chain, secrets handling, COPR/third-party sources |
 | **Breakage Gate** | Cross-repo breaking changes — removing/renaming inputs, changing defaults that affect consuming repos |
-| **Merge Gate** | Final PR approval and merge — always human |
+| **Merge Gate** | PRs in image repos (bluefin, bluefin-lts, dakota) merge automatically via the factory pipeline. PRs in `projectbluefin/actions` require a maintainer merge. |
 
 When in doubt, open a draft PR with your implementation and ask explicitly.
 
@@ -167,14 +167,14 @@ Do not request review without evidence. Before opening a PR for review:
 All three image repos (bluefin, bluefin-lts, dakota) use a **PR-as-gate** promotion model:
 
 1. `promote-testing-to-main.yml` maintains an always-open `auto/promote-testing-to-main` PR
-2. `pr-release-gate.yml` (inline `gate` job in the promote workflow) verifies digests, cosign, and e2e — posts a sticky status comment and sets `release/ready` or `release/blocked` label
-3. Merging the PR (requires **2 `projectbluefin/maintainers` approvals**) cuts a release
+2. `pr-release-gate.yml` verifies digests, cosign, and e2e — posts a sticky status comment and sets `release/ready` or `release/blocked` label
+3. Once gate checks pass the PR is **automatically enqueued** via `enqueuePullRequest` GraphQL — no human approvals required
 4. `execute-release.yml` fires on merge: re-verifies, `skopeo copy :testing → :stable/:lts`, creates GitHub release
 5. `release-reminder.yml` posts a plain-text reminder after 7 days if the PR is still unmerged
 
 **Tag targets:** bluefin `:testing` → `:stable`, bluefin-lts `:testing` → `:lts`, dakota `:testing` → `:stable`
 
-**Branch protection:** `main` in all three repos requires 2 approvals from `projectbluefin/maintainers`. The `maintainers` team can bypass for emergency admin merges.
+**Branch protection:** `main` in all three repos uses a merge queue (ruleset). The promotion PR is auto-enqueued by the factory once gate checks pass — no human approvals required. Maintainers can admin-merge to bypass for emergencies.
 
 **Critical GITHUB_TOKEN limit:** Pushes from `GITHUB_TOKEN` do NOT fire `pull_request` synchronize events, and cannot dispatch `workflow_dispatch` events. Gate checks must run as inline jobs inside the workflow that updates the PR branch — not via separate dispatch.
 
