@@ -1,10 +1,90 @@
 # Project Bluefin — Org-Wide Agent Instructions
 
-> **You are part of an agentic operating system, built by agentic workflows.**
->
-> Bluefin is being rebooted as an agentic-first project. Agents implement. Humans approve design, security-sensitive changes, and merge. The goal: prove that agentic workflows can build the agentic OS.
+---
 
-If "Bluefin 2.0" is to succeed, you must use agents for the toil, let the humans design the use case. You're the check to ensure they are secure and CNCF industry competent in automation. This self improving workflow is named "The pattern".
+## READ THIS FIRST — Non-Negotiable Rules
+
+These two rules apply to every agent, every session, every repo in this org. They are not suggestions.
+
+### Rule 1: Read the docs. Every time.
+
+Linux, Kubernetes, bootc, cosign, Argo, KubeVirt — these are some of the most documented technologies on the planet. There is no excuse for guessing.
+
+**Before writing any code that uses a tool, library, or API:**
+
+```
+resolve-library-id "<tool>"  →  get-library-docs  →  implement  →  cite the section
+```
+
+Banned behaviors — these waste hours and will not be tolerated:
+- Guessing flags or API signatures
+- Trial-and-error flag hunting
+- Spending more than 5 minutes on a tool question without reading its docs
+- Implementing from training-data memory instead of live documentation
+
+If Context7 does not have the library, fetch the upstream README directly with `curl` or `gh`. Reading the source is always correct. Guessing is never correct.
+
+**Tool table — look these up, never guess:**
+
+| Category | Tools |
+|---|---|
+| Image supply chain | `bootc`, `cosign`, `skopeo`, `buildah`, `oras` |
+| Security scanning | `syft`, `grype`, `trivy` |
+| CI tooling | `actionlint`, `renovate`, `pre-commit` |
+| Build systems | `BuildStream/bst`, `just` |
+| Testing | `qecore`, `dogtail`, `behave` |
+| Cluster ops | `helm`, `kubectl`, `k3s`, `ArgoCD`, `Argo Workflows`, `KubeVirt` |
+| Observability | `loki`, `zot` |
+| TUI | `bubbletea`, `huh`, `lipgloss` |
+| Language toolchains | `go`, `golangci-lint` |
+
+### Rule 2: Write back every session.
+
+Every session produces two outputs: the work and the learning. Output 1 without Output 2 leaves the system no smarter. **The loop only compounds if agents write back.**
+
+```
+Agent works on task
+  └─ discovers pattern / workaround / convention
+       └─ writes it to the relevant skill file
+            └─ commits in the same PR
+                 └─ next agent starts smarter
+                      └─ loop
+```
+
+**Before marking work complete:**
+
+- [ ] Did I discover any workaround, non-obvious pattern, or convention?
+- [ ] Is there a skill file for the area I worked in?
+- [ ] If yes — did I update it?
+- [ ] If no — did I create one?
+- [ ] Does the skill file have `context7-sources` frontmatter for every tool it covers?
+- [ ] Is the skill file committed in this same PR?
+
+**Skill file format — required:**
+
+```yaml
+---
+name: <skill-name>
+description: "<one sentence: what this covers and when to load it>"
+metadata:
+  type: procedure | reference
+  context7-sources:
+    - /upstream-org/repo-name   # one entry per tool this skill covers
+---
+```
+
+Without `context7-sources`, the next agent has nowhere to look and guesses instead. That is how hours get wasted.
+
+**Where learnings live:**
+
+| You are working in... | Write to |
+|---|---|
+| `projectbluefin/actions` | `docs/skills/` (Copilot CLI) AND `.github/skills/` (Cloud Agent) |
+| Any other projectbluefin repo | That repo's `docs/skills/` (create if absent) |
+| ublue-os repos (aurora, bazzite) | NEVER — no writes of any kind. Tell the human. |
+| Cross-cutting (affects multiple repos) | Local first, then open propagation issue in `projectbluefin/actions` |
+
+Full skill file format: [`projectbluefin/actions/.github/skills/skill-improvement/SKILL.md`](https://github.com/projectbluefin/actions/blob/main/.github/skills/skill-improvement/SKILL.md)
 
 ---
 
@@ -41,114 +121,6 @@ If "Bluefin 2.0" is to succeed, you must use agents for the toil, let the humans
 **kubestellar-bot** is the repo automation layer built on [KubeStellar Hive](https://kubestellar.io/live/hive/bluefin/). It picks up queued issues, dispatches agents to implement fixes and improvements, and ships them back.
 
 **You** are an agent in this system. Your work compounds. YOU ENSURE THAT THESE WORKFLOWS REMAIN DETERMINISTIC AND REPEATABLE FOR THE HUMANS VIA JUST.
-
----
-
-## Tool Documentation — Context7 First
-
-> **This is a hard rule. No exceptions.**
-
-Every tool in this factory has open-source documentation. You have access to it via Context7. Use it.
-
-**Before writing a single line that uses any tool, library, or API:**
-
-```
-resolve-library-id "<tool>"  →  get-library-docs  →  implement  →  cite the section
-```
-
-This applies to every tool without exception:
-
-| Category | Tools |
-|---|---|
-| Image supply chain | `bootc`, `cosign`, `skopeo`, `buildah`, `oras` |
-| Security scanning | `syft`, `grype`, `trivy` |
-| CI tooling | `actionlint`, `renovate`, `pre-commit` |
-| Build systems | `BuildStream/bst`, `just` |
-| Testing | `qecore`, `dogtail`, `behave` |
-| Cluster ops | `helm`, `kubectl`, `k3s`, `ArgoCD`, `Argo Workflows`, `KubeVirt` |
-| Observability | `loki`, `zot` |
-| TUI | `bubbletea`, `huh`, `lipgloss` |
-| Language toolchains | `go`, `golangci-lint` |
-
-**Banned behaviors:**
-- Guessing flags, API signatures, or configuration schema
-- Trial-and-error flag hunting
-- Spending more than 5 minutes on a tool behavior question without reading its docs
-- Implementing against training-data memory instead of live documentation
-
-If Context7 does not have a library, use `curl` or `gh` to fetch the upstream README or docs directly. Reading the source is always correct. Guessing is never correct.
-
----
-
-## The Self-Improvement Loop
-
-> **This is the core operating model. Read it.**
-
-Every agent session produces two outputs:
-1. **The work** — the PR, fix, or improvement.
-2. **The learning** — what you discovered that a future agent should know.
-
-Output 1 without Output 2 leaves the system no smarter. **The loop only compounds if agents write back.**
-
-```
-Agent works on task
-  └─ discovers pattern / workaround / convention
-       └─ writes it to the relevant skill file
-            └─ commits in the same PR
-                 └─ next agent starts smarter
-                      └─ loop
-```
-
-### Skill-improvement mandate — applies to every repo in this org
-
-**Before marking your work complete / before requesting final review:**
-
-- [ ] Did I discover any workaround, non-obvious pattern, or convention?
-- [ ] Is there a skill file for the area I worked in?
-- [ ] If yes — did I update it?
-- [ ] If no — did I create one?
-- [ ] Does every skill file that covers a tool have `context7-sources` frontmatter listing that tool's Context7 library ID?
-- [ ] Is the skill file committed in this same PR?
-
-**Skill file frontmatter is required.** Every skill file must open with:
-
-```yaml
----
-name: <skill-name>
-description: "<one sentence: what this covers and when to load it>"
-metadata:
-  type: procedure | reference
-  context7-sources:
-    - /upstream-org/repo-name   # one entry per tool this skill covers
----
-```
-
-If you used a tool and there is no `context7-sources` entry for it in the relevant skill file, add it. This is not optional. It is the mechanism that prevents the next agent from guessing.
-
-For the full skill file format, see:
-[`projectbluefin/actions/.github/skills/skill-improvement/SKILL.md`](https://github.com/projectbluefin/actions/blob/main/.github/skills/skill-improvement/SKILL.md)
-
-### What counts as a learning worth writing back
-
-**Write it:**
-- A workaround for an upstream bug (include component + issue link)
-- A non-obvious pattern required for correctness
-- A convention that isn't obvious from the code
-- Something you had to discover by trial and error
-
-**Don't write it:**
-- One-off task notes ("use commit message X for this PR")
-- Obvious things any developer would know
-- Ephemeral state ("currently broken, fix pending")
-
-### Where learnings live
-
-| You are working in... | Write to |
-|---|---|
-| `projectbluefin/actions` | `docs/skills/` (Copilot CLI) AND `.github/skills/` (Cloud Agent) |
-| Any other projectbluefin repo | That repo's `docs/skills/` (create if absent) |
-| ublue-os repos (aurora, bazzite) | **NEVER write to these repos** — no issues, PRs, comments, forks, webhooks, or automated reports. Tell the human to report manually. See prohibition below. |
-| Cross-cutting (affects multiple repos) | Local first, then open propagation issue in `projectbluefin/actions` |
 
 ---
 
