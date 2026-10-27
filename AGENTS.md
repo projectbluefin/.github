@@ -79,12 +79,12 @@ Without `context7-sources`, the next agent has nowhere to look and guesses inste
 
 | You are working in... | Write to |
 |---|---|
-| `projectbluefin/actions` | `docs/skills/` (Copilot CLI) AND `.github/skills/` (Cloud Agent) |
+| `projectbluefin/actions` | `docs/skills/` |
 | Any other projectbluefin repo | That repo's `docs/skills/` (create if absent) |
 | ublue-os repos (aurora, bazzite) | NEVER — no writes of any kind. Tell the human. |
 | Cross-cutting (affects multiple repos) | Local first, then open propagation issue in `projectbluefin/actions` |
 
-Full skill file format: [`projectbluefin/actions/.github/skills/skill-improvement/SKILL.md`](https://github.com/projectbluefin/actions/blob/main/.github/skills/skill-improvement/SKILL.md)
+Skill file format is per repository, with no org-wide standard: follow the contract of the repo you are writing in (for example common's [`docs/skills/write-a-skill.md`](https://github.com/projectbluefin/common/blob/main/docs/skills/write-a-skill.md), whose `description` is capped at 256 characters by `docs/skills/index.schema.json`; `projectbluefin/actions` uses its router format in `docs/skills/`).
 
 ---
 
